@@ -1,4 +1,4 @@
-export type HttpRouteHandler = (match: URLPatternResult, request: Request) => Response | Promise<Response>;
+export type HttpRouteHandler = (request: Request, match: URLPatternResult) => Response | Promise<Response>;
 
 type HttpRoute = {
   pattern: URLPattern;
@@ -54,7 +54,7 @@ export class HttpRouter {
         const result = route.pattern.exec(url);
 
         if (result) {
-          const response = await route.handler(result, request);
+          const response = await route.handler(request, result);
           return response;
         }
       }

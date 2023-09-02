@@ -17,7 +17,7 @@ const listener = Deno.listen({ port: 8080 });
 
 const router = new HttpRouter();
 
-router.get("/users/:id", (match, _req) => {
+router.get("/users/:id", (_req, match) => {
   const user = users[match.pathname.groups.id];
 
   if (!user) {
@@ -27,7 +27,7 @@ router.get("/users/:id", (match, _req) => {
   return Response.json(user, { status: 200 });
 });
 
-router.put("/users/:id", async (match, req) => {
+router.put("/users/:id", async (req, match) => {
   const user = await req.json();
   users[match.pathname.groups.id] = user;
   return Response.json(user, { status: 200 });

@@ -22,7 +22,7 @@ Deno.test("match path parameter", async () => {
   const router = new HttpRouter();
 
   router.get("/", () => new Response("not found"));
-  router.get("/:id", (match) => new Response(match.pathname.groups.id));
+  router.get("/:id", (_, match) => new Response(match.pathname.groups.id));
 
   const id = crypto.randomUUID();
   const response1 = await router.handleRequest(createRequest("/"));

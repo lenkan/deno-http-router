@@ -1,4 +1,7 @@
-import { assertEquals, assertRejects } from "https://deno.land/std@0.198.0/assert/mod.ts";
+import {
+  assertEquals,
+  assertRejects,
+} from "https://deno.land/std@0.198.0/assert/mod.ts";
 
 import { HttpRouter } from "./router.ts";
 
@@ -13,7 +16,9 @@ Deno.test("get random json body", async () => {
   const body = { message: crypto.randomUUID() };
   router.get("/", () => Response.json(body));
 
-  const response = await router.handleRequest(new Request(new URL("/", baseurl)));
+  const response = await router.handleRequest(
+    new Request(new URL("/", baseurl)),
+  );
 
   assertEquals(await response.json(), body);
 });

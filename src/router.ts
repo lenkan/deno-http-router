@@ -1,4 +1,7 @@
-export type HttpRouteHandler = (request: Request, match: URLPatternResult) => Response | Promise<Response>;
+export type HttpRouteHandler = (
+  request: Request,
+  match: URLPatternResult,
+) => Response | Promise<Response>;
 
 type HttpRoute = {
   pattern: URLPattern;
@@ -6,17 +9,30 @@ type HttpRoute = {
   method: string;
 };
 
-export type HttpMethod = "get" | "post" | "delete" | "patch" | "put" | "options";
+export type HttpMethod =
+  | "get"
+  | "post"
+  | "delete"
+  | "patch"
+  | "put"
+  | "options";
 
 export class HttpRouter {
   #routes: HttpRoute[] = [];
 
-  get = (pattern: URLPatternInput, handler: HttpRouteHandler) => this.#use("get", pattern, handler);
-  post = (pattern: URLPatternInput, handler: HttpRouteHandler) => this.#use("post", pattern, handler);
-  put = (pattern: URLPatternInput, handler: HttpRouteHandler) => this.#use("put", pattern, handler);
-  delete = (pattern: URLPatternInput, handler: HttpRouteHandler) => this.#use("delete", pattern, handler);
+  get = (pattern: URLPatternInput, handler: HttpRouteHandler) =>
+    this.#use("get", pattern, handler);
+  post = (pattern: URLPatternInput, handler: HttpRouteHandler) =>
+    this.#use("post", pattern, handler);
+  put = (pattern: URLPatternInput, handler: HttpRouteHandler) =>
+    this.#use("put", pattern, handler);
+  delete = (pattern: URLPatternInput, handler: HttpRouteHandler) =>
+    this.#use("delete", pattern, handler);
 
-  all = (pattern: URLPatternInput, handler: Partial<Record<HttpMethod, HttpRouteHandler>> | HttpRouteHandler) => {
+  all = (
+    pattern: URLPatternInput,
+    handler: Partial<Record<HttpMethod, HttpRouteHandler>> | HttpRouteHandler,
+  ) => {
     if (typeof handler === "object") {
       for (const [method, h] of Object.entries(handler)) {
         this.#use(method as HttpMethod, pattern, h);
@@ -26,7 +42,11 @@ export class HttpRouter {
     }
   };
 
-  #use = (method: HttpMethod | "all", pattern: string | URLPatternInput, handler: HttpRouteHandler) => {
+  #use = (
+    method: HttpMethod | "all",
+    pattern: string | URLPatternInput,
+    handler: HttpRouteHandler,
+  ) => {
     if (typeof pattern === "string") {
       this.#routes.push({
         method,
@@ -49,7 +69,10 @@ export class HttpRouter {
 
   async handleRequest(request: Request): Promise<Response> {
     for (const route of this.#routes) {
-      if (route.method.toUpperCase() === "ALL" || route.method.toUpperCase() === request.method.toUpperCase()) {
+      if (
+        route.method.toUpperCase() === "ALL" ||
+        route.method.toUpperCase() === request.method.toUpperCase()
+      ) {
         const url = new URL(request.url, "http://example.com");
         const result = route.pattern.exec(url);
 

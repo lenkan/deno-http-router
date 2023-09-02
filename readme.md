@@ -1,6 +1,7 @@
 # Deno http router
 
-Simple, zero dependency, module for http routing in deno. It uses the built in URLPattern implementation for path matching.
+Simple, zero dependency, module for http routing in deno. It uses the built in
+URLPattern implementation for path matching.
 
 ## Example
 

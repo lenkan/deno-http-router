@@ -1,4 +1,4 @@
-import { HttpRouter } from "../mod.ts";
+import { createRouter } from "../mod.ts";
 
 type User = { name: string };
 const users: Record<string, User> = {
@@ -6,9 +6,7 @@ const users: Record<string, User> = {
   "2": { name: "Jane Doe" },
 };
 
-const listener = Deno.listen({ port: 8080 });
-
-const router = new HttpRouter();
+const router = createRouter();
 
 router.get("/users/:id", (_req, match) => {
   if (!match.pathname.groups.id) {
@@ -38,4 +36,4 @@ router.all("*", (_match, _req) => {
   return Response.json({ message: "Not Found" }, { status: 404 });
 });
 
-await router.serve(listener);
+Deno.serve({ port: 8080 }, router);
